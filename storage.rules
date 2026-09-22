@@ -1,0 +1,11 @@
+rules_version = '2';
+
+// Same note as firestore.rules - open by default because the app uses its
+// own login screen, not Firebase Auth. Lock down before going public.
+service firebase.storage {
+  match /b/{bucket}/o {
+    match /{allPaths=**} {
+      allow read, write: if true;
+    }
+  }
+}

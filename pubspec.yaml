@@ -1,0 +1,44 @@
+name: wedding_qr_app
+description: "Wedding contribution ledger - event setup, QR-code contributor records, gate scanning, and Excel/CSV export. Web, Android and iOS, backed by Firebase."
+publish_to: 'none'
+version: 1.0.0+1
+
+environment:
+  sdk: '>=3.3.0 <4.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+  cupertino_icons: ^1.0.8
+
+  # Firebase
+  firebase_core: ^3.6.0
+  cloud_firestore: ^5.4.4
+  firebase_storage: ^12.3.4
+
+  # QR generation + scanning
+  qr_flutter: ^4.1.0
+  mobile_scanner: ^7.1.4
+
+  # Photos (bride / groom)
+  image_picker: ^1.1.2
+
+  # Cross-platform "download" of the QR image + CSV/XLSX exports
+  file_saver: ^0.3.1
+
+  # Spreadsheet export
+  excel: ^4.0.6
+  csv: ^6.0.0
+
+  intl: ^0.19.0
+  provider: ^6.1.2
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^4.0.0
+
+flutter:
+  uses-material-design: true
+  assets:
+    - assets/logo.png
