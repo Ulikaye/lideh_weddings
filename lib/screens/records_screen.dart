@@ -54,7 +54,11 @@ class _RecordsScreenState extends State<RecordsScreen> {
         final totalAmount = all.fold<num>(0, (sum, c) => sum + c.amount);
         final checkedInCount = all.where((c) => c.checkedIn).length;
 
-        return Column(
+        return Center(
+          child: ConstrainedBox(
+            constraints: const BoxConstraints(maxWidth: 700),
+            child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             Padding(
               padding: const EdgeInsets.fromLTRB(16, 16, 16, 8),
@@ -146,6 +150,8 @@ class _RecordsScreenState extends State<RecordsScreen> {
                     ),
             ),
           ],
+            ),
+          ),
         );
       },
     );

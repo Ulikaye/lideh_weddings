@@ -33,12 +33,39 @@ class _HomeShellState extends State<HomeShell> {
     );
   }
 
+  void _showInfo() {
+    showDialog(
+      context: context,
+      builder: (_) => AlertDialog(
+        title: const Text('Harusi Cards'),
+        content: const Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text('Kwa msaada zaidi: +255 788 939 812'),
+            SizedBox(height: 8),
+            Text('Developed by Emmanuel Albart Ulikaye'),
+            Text('ulikaye635@gmail.com'),
+          ],
+        ),
+        actions: [
+          TextButton(onPressed: () => Navigator.pop(context), child: const Text('Close')),
+        ],
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text(_titles[_index]),
         actions: [
+          IconButton(
+            onPressed: _showInfo,
+            icon: const Icon(Icons.info_outline),
+            tooltip: 'About',
+          ),
           IconButton(
             onPressed: _logout,
             icon: const Icon(Icons.logout),

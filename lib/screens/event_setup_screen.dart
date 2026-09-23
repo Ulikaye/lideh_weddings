@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../models/event_details.dart';
 import '../services/firestore_service.dart';
 import '../theme/app_theme.dart';
+import '../widgets/app_form_card.dart';
 
 class EventSetupScreen extends StatefulWidget {
   const EventSetupScreen({super.key});
@@ -75,81 +76,87 @@ class _EventSetupScreenState extends State<EventSetupScreen> {
       stream: FirestoreService.instance.streamEvent(),
       builder: (context, snapshot) {
         if (snapshot.hasData) _applyEvent(snapshot.data!);
-        return SingleChildScrollView(
-          padding: const EdgeInsets.all(16),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              TextField(
-                controller: _brideName,
-                decoration: const InputDecoration(labelText: "Bride's name"),
+        return AppFormCard(
+          title: 'Event Setup',
+          subtitle: 'Tell us about the big day.',
+          children: [
+            const AppFieldLabel("Bride's name"),
+            TextField(
+              controller: _brideName,
+              decoration: const InputDecoration(hintText: "Enter bride's name"),
+            ),
+            const SizedBox(height: 18),
+            const AppFieldLabel("Groom's name"),
+            TextField(
+              controller: _groomName,
+              decoration: const InputDecoration(hintText: "Enter groom's name"),
+            ),
+            const SizedBox(height: 18),
+            const AppFieldLabel('Wedding date'),
+            InkWell(
+              onTap: _pickDate,
+              child: InputDecorator(
+                decoration: const InputDecoration(),
+                child: Text(_weddingDate == null
+                    ? 'Select a date'
+                    : _weddingDate!.toIso8601String().substring(0, 10)),
               ),
-              const SizedBox(height: 12),
-              TextField(
-                controller: _groomName,
-                decoration: const InputDecoration(labelText: "Groom's name"),
-              ),
-              const SizedBox(height: 12),
-              InkWell(
-                onTap: _pickDate,
-                child: InputDecorator(
-                  decoration: const InputDecoration(labelText: 'Wedding date'),
-                  child: Text(_weddingDate == null
-                      ? 'Select a date'
-                      : _weddingDate!.toIso8601String().substring(0, 10)),
-                ),
-              ),
-              const SizedBox(height: 12),
-              TextField(
-                controller: _venue,
-                decoration: const InputDecoration(labelText: 'Venue'),
-              ),
-              const SizedBox(height: 12),
-              Row(
-                children: [
-                  Expanded(
-                    child: TextField(
-                      controller: _singleAmount,
-                      keyboardType: TextInputType.number,
-                      decoration: const InputDecoration(labelText: 'Single card amount (TZS)'),
-                    ),
+            ),
+            const SizedBox(height: 18),
+            const AppFieldLabel('Venue'),
+            TextField(
+              controller: _venue,
+              decoration: const InputDecoration(hintText: 'e.g., Kigamboni Gardens'),
+            ),
+            const SizedBox(height: 18),
+            Row(
+              children: [
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const AppFieldLabel('Single (TZS)'),
+                      TextField(
+                        controller: _singleAmount,
+                        keyboardType: TextInputType.number,
+                        decoration: const InputDecoration(hintText: '50000'),
+                      ),
+                    ],
                   ),
-                  const SizedBox(width: 12),
-                  Expanded(
-                    child: TextField(
-                      controller: _doubleAmount,
-                      keyboardType: TextInputType.number,
-                      decoration: const InputDecoration(labelText: 'Double card amount (TZS)'),
-                    ),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 24),
-              ElevatedButton(
-                onPressed: _saving ? null : _save,
-                child: _saving
-                    ? const SizedBox(
-                        height: 18, width: 18,
-                        child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white))
-                    : const Text('Save event details'),
-              ),
-              if (_savedNote != null)
-                Padding(
-                  padding: const EdgeInsets.only(top: 8),
-                  child: Text(_savedNote!,
-                      style: const TextStyle(color: AppColors.teal),
-                      textAlign: TextAlign.center),
                 ),
-              const SizedBox(height: 12),
-              const Text(
-                'Note: the invitation card itself is designed outside this '
-                'app - what you save here just feeds the QR code details and '
-                "records list. Send your designer the guest's QR (from Add "
-                'or Records) to embed in the printed card.',
-                style: TextStyle(color: Colors.black54, fontSize: 12),
+                const SizedBox(width: 14),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const AppFieldLabel('Double (TZS)'),
+                      TextField(
+                        controller: _doubleAmount,
+                        keyboardType: TextInputType.number,
+                        decoration: const InputDecoration(hintText: '100000'),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 28),
+            ElevatedButton(
+              onPressed: _saving ? null : _save,
+              child: _saving
+                  ? const SizedBox(
+                      height: 18, width: 18,
+                      child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white))
+                  : const Text('Save event details'),
+            ),
+            if (_savedNote != null)
+              Padding(
+                padding: const EdgeInsets.only(top: 10),
+                child: Text(_savedNote!,
+                    style: const TextStyle(color: AppColors.teal),
+                    textAlign: TextAlign.center),
               ),
-            ],
-          ),
+          ],
         );
       },
     );

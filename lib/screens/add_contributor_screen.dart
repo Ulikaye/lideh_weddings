@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../models/event_details.dart';
 import '../services/firestore_service.dart';
 import '../utils/formatters.dart';
+import '../widgets/app_form_card.dart';
 import 'contributor_qr_screen.dart';
 
 class AddContributorScreen extends StatefulWidget {
@@ -73,73 +74,81 @@ class _AddContributorScreenState extends State<AddContributorScreen> {
           _event = snapshot.data;
           if (firstLoad) _syncAmount();
         }
-        return SingleChildScrollView(
-          padding: const EdgeInsets.all(16),
-          child: Form(
-            key: _formKey,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                TextFormField(
-                  controller: _fullName,
-                  decoration: const InputDecoration(labelText: 'Full name'),
-                  validator: (v) =>
-                      (v == null || v.trim().isEmpty) ? 'Required' : null,
-                ),
-                const SizedBox(height: 12),
-                DropdownButtonFormField<String>(
-                  initialValue: _cardType,
-                  decoration: const InputDecoration(labelText: 'Card type'),
-                  items: const [
-                    DropdownMenuItem(value: 'Single', child: Text('Single')),
-                    DropdownMenuItem(value: 'Double', child: Text('Double')),
+        return AppFormCard(
+          title: 'Add Contributor',
+          subtitle: 'Record a new guest contribution.',
+          children: [
+            Form(
+              key: _formKey,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  const AppFieldLabel('Full name'),
+                  TextFormField(
+                    controller: _fullName,
+                    decoration: const InputDecoration(hintText: 'Enter full name'),
+                    validator: (v) =>
+                        (v == null || v.trim().isEmpty) ? 'Required' : null,
+                  ),
+                  const SizedBox(height: 18),
+                  const AppFieldLabel('Card type'),
+                  DropdownButtonFormField<String>(
+                    initialValue: _cardType,
+                    decoration: const InputDecoration(),
+                    items: const [
+                      DropdownMenuItem(value: 'Single', child: Text('Single')),
+                      DropdownMenuItem(value: 'Double', child: Text('Double')),
+                    ],
+                    onChanged: (v) {
+                      setState(() => _cardType = v ?? 'Single');
+                      _syncAmount();
+                    },
+                  ),
+                  const SizedBox(height: 18),
+                  const AppFieldLabel('Amount (TZS)'),
+                  TextFormField(
+                    controller: _amount,
+                    keyboardType: TextInputType.number,
+                    decoration: const InputDecoration(hintText: 'Amount'),
+                  ),
+                  const SizedBox(height: 18),
+                  const AppFieldLabel('Date'),
+                  InkWell(
+                    onTap: _pickDate,
+                    child: InputDecorator(
+                      decoration: const InputDecoration(),
+                      child: Text(_date.toIso8601String().substring(0, 10)),
+                    ),
+                  ),
+                  const SizedBox(height: 18),
+                  const AppFieldLabel('Phone (optional)'),
+                  TextFormField(
+                    controller: _phone,
+                    keyboardType: TextInputType.phone,
+                    decoration: const InputDecoration(hintText: 'Enter phone number'),
+                  ),
+                  const SizedBox(height: 28),
+                  ElevatedButton(
+                    onPressed: _saving ? null : _submit,
+                    child: _saving
+                        ? const SizedBox(
+                            height: 18, width: 18,
+                            child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white))
+                        : const Text('Save & generate QR'),
+                  ),
+                  if (_event != null) ...[
+                    const SizedBox(height: 14),
+                    Text(
+                      'Single: ${formatMoney(_event!.singleAmount)}  ·  '
+                      'Double: ${formatMoney(_event!.doubleAmount)}',
+                      style: const TextStyle(color: Colors.black54, fontSize: 12),
+                      textAlign: TextAlign.center,
+                    ),
                   ],
-                  onChanged: (v) {
-                    setState(() => _cardType = v ?? 'Single');
-                    _syncAmount();
-                  },
-                ),
-                const SizedBox(height: 12),
-                TextFormField(
-                  controller: _amount,
-                  keyboardType: TextInputType.number,
-                  decoration: const InputDecoration(labelText: 'Amount (TZS)'),
-                ),
-                const SizedBox(height: 12),
-                InkWell(
-                  onTap: _pickDate,
-                  child: InputDecorator(
-                    decoration: const InputDecoration(labelText: 'Date'),
-                    child: Text(_date.toIso8601String().substring(0, 10)),
-                  ),
-                ),
-                const SizedBox(height: 12),
-                TextFormField(
-                  controller: _phone,
-                  keyboardType: TextInputType.phone,
-                  decoration: const InputDecoration(labelText: 'Phone (optional)'),
-                ),
-                const SizedBox(height: 24),
-                ElevatedButton(
-                  onPressed: _saving ? null : _submit,
-                  child: _saving
-                      ? const SizedBox(
-                          height: 18, width: 18,
-                          child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white))
-                      : const Text('Save & generate QR'),
-                ),
-                if (_event != null) ...[
-                  const SizedBox(height: 16),
-                  Text(
-                    'Single: ${formatMoney(_event!.singleAmount)}  ·  '
-                    'Double: ${formatMoney(_event!.doubleAmount)}',
-                    style: const TextStyle(color: Colors.black54, fontSize: 12),
-                    textAlign: TextAlign.center,
-                  ),
                 ],
-              ],
+              ),
             ),
-          ),
+          ],
         );
       },
     );

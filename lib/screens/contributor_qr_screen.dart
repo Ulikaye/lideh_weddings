@@ -96,13 +96,6 @@ class _ContributorQrScreenState extends State<ContributorQrScreen> {
                         : const Icon(Icons.download),
                     label: const Text('Download QR (PNG)'),
                   ),
-                  const SizedBox(height: 8),
-                  const Text(
-                    'Hand this PNG to your card designer to embed in the '
-                    'printed invitation.',
-                    style: TextStyle(color: Colors.black54, fontSize: 12),
-                    textAlign: TextAlign.center,
-                  ),
                 ],
               ),
             ),
