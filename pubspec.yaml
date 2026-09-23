@@ -14,14 +14,10 @@ dependencies:
   # Firebase
   firebase_core: ^3.6.0
   cloud_firestore: ^5.4.4
-  firebase_storage: ^12.3.4
 
   # QR generation + scanning
   qr_flutter: ^4.1.0
   mobile_scanner: ^7.1.4
-
-  # Photos (bride / groom)
-  image_picker: ^1.1.2
 
   # Cross-platform "download" of the QR image + CSV/XLSX exports
   file_saver: ^0.3.1

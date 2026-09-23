@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
 
 import '../models/event_details.dart';
 import '../services/firestore_service.dart';
-import '../services/storage_service.dart';
 import '../theme/app_theme.dart';
 
 class EventSetupScreen extends StatefulWidget {
@@ -21,12 +19,8 @@ class _EventSetupScreenState extends State<EventSetupScreen> {
   final _doubleAmount = TextEditingController();
   DateTime? _weddingDate;
 
-  String? _brideImageUrl;
-  String? _groomImageUrl;
   bool _loadedOnce = false;
   bool _saving = false;
-  bool _uploadingBride = false;
-  bool _uploadingGroom = false;
   String? _savedNote;
 
   void _applyEvent(EventDetails ev) {
@@ -37,31 +31,8 @@ class _EventSetupScreenState extends State<EventSetupScreen> {
     _venue.text = ev.venue;
     _singleAmount.text = ev.singleAmount.toString();
     _doubleAmount.text = ev.doubleAmount.toString();
-    _brideImageUrl = ev.brideImageUrl;
-    _groomImageUrl = ev.groomImageUrl;
     if (ev.weddingDate.isNotEmpty) {
       _weddingDate = DateTime.tryParse(ev.weddingDate);
-    }
-  }
-
-  Future<void> _pickPhoto(bool bride) async {
-    final picker = ImagePicker();
-    final file = await picker.pickImage(source: ImageSource.gallery, imageQuality: 85);
-    if (file == null) return;
-    setState(() => bride ? _uploadingBride = true : _uploadingGroom = true);
-    try {
-      final bytes = await file.readAsBytes();
-      final url = await StorageService.instance
-          .uploadEventPhoto(bride ? 'bride' : 'groom', bytes);
-      setState(() {
-        if (bride) {
-          _brideImageUrl = url;
-        } else {
-          _groomImageUrl = url;
-        }
-      });
-    } finally {
-      setState(() => bride ? _uploadingBride = false : _uploadingGroom = false);
     }
   }
 
@@ -86,8 +57,6 @@ class _EventSetupScreenState extends State<EventSetupScreen> {
       venue: _venue.text.trim(),
       singleAmount: num.tryParse(_singleAmount.text) ?? 0,
       doubleAmount: num.tryParse(_doubleAmount.text) ?? 0,
-      brideImageUrl: _brideImageUrl,
-      groomImageUrl: _groomImageUrl,
     );
     await FirestoreService.instance.saveEvent(event);
     if (!mounted) return;
@@ -98,35 +67,6 @@ class _EventSetupScreenState extends State<EventSetupScreen> {
     Future.delayed(const Duration(seconds: 2), () {
       if (mounted) setState(() => _savedNote = null);
     });
-  }
-
-  Widget _photoPicker(String label, String? url, bool uploading, VoidCallback onTap) {
-    return Column(
-      children: [
-        GestureDetector(
-          onTap: uploading ? null : onTap,
-          child: Container(
-            width: 110,
-            height: 110,
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(55),
-              border: Border.all(color: AppColors.gold, width: 2),
-              image: url != null
-                  ? DecorationImage(image: NetworkImage(url), fit: BoxFit.cover)
-                  : null,
-            ),
-            child: uploading
-                ? const Center(child: CircularProgressIndicator())
-                : (url == null
-                    ? const Icon(Icons.add_a_photo, color: AppColors.teal)
-                    : null),
-          ),
-        ),
-        const SizedBox(height: 6),
-        Text(label),
-      ],
-    );
   }
 
   @override
@@ -140,16 +80,6 @@ class _EventSetupScreenState extends State<EventSetupScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  _photoPicker('Bride photo', _brideImageUrl, _uploadingBride,
-                      () => _pickPhoto(true)),
-                  _photoPicker('Groom photo', _groomImageUrl, _uploadingGroom,
-                      () => _pickPhoto(false)),
-                ],
-              ),
-              const SizedBox(height: 20),
               TextField(
                 controller: _brideName,
                 decoration: const InputDecoration(labelText: "Bride's name"),
@@ -212,7 +142,7 @@ class _EventSetupScreenState extends State<EventSetupScreen> {
                 ),
               const SizedBox(height: 12),
               const Text(
-                'Note: the invitation card itself is now designed outside this '
+                'Note: the invitation card itself is designed outside this '
                 'app - what you save here just feeds the QR code details and '
                 "records list. Send your designer the guest's QR (from Add "
                 'or Records) to embed in the printed card.',

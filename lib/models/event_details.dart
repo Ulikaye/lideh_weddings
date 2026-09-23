@@ -7,8 +7,6 @@ class EventDetails {
   final String venue;
   final num singleAmount;
   final num doubleAmount;
-  final String? brideImageUrl;
-  final String? groomImageUrl;
 
   const EventDetails({
     this.brideName = '',
@@ -17,8 +15,6 @@ class EventDetails {
     this.venue = '',
     this.singleAmount = 50000,
     this.doubleAmount = 100000,
-    this.brideImageUrl,
-    this.groomImageUrl,
   });
 
   factory EventDetails.fromMap(Map<String, dynamic>? map) {
@@ -30,8 +26,6 @@ class EventDetails {
       venue: map['venue'] ?? '',
       singleAmount: map['singleAmount'] ?? 50000,
       doubleAmount: map['doubleAmount'] ?? 100000,
-      brideImageUrl: map['brideImageUrl'],
-      groomImageUrl: map['groomImageUrl'],
     );
   }
 
@@ -42,8 +36,6 @@ class EventDetails {
         'venue': venue,
         'singleAmount': singleAmount,
         'doubleAmount': doubleAmount,
-        'brideImageUrl': brideImageUrl,
-        'groomImageUrl': groomImageUrl,
       };
 
   EventDetails copyWith({
@@ -53,8 +45,6 @@ class EventDetails {
     String? venue,
     num? singleAmount,
     num? doubleAmount,
-    String? brideImageUrl,
-    String? groomImageUrl,
   }) {
     return EventDetails(
       brideName: brideName ?? this.brideName,
@@ -63,8 +53,6 @@ class EventDetails {
       venue: venue ?? this.venue,
       singleAmount: singleAmount ?? this.singleAmount,
       doubleAmount: doubleAmount ?? this.doubleAmount,
-      brideImageUrl: brideImageUrl ?? this.brideImageUrl,
-      groomImageUrl: groomImageUrl ?? this.groomImageUrl,
     );
   }
 }

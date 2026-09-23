@@ -43,23 +43,23 @@ class DefaultFirebaseOptions {
     storageBucket: 'lideh-wedding.firebasestorage.app',
     measurementId: 'G-3DEFQWYSY8',
   );
-
   // TODO: replace after `flutterfire configure` or manual registration.
+
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'TODO-android-api-key',
-    appId: 'TODO-android-app-id',
+    apiKey: 'AIzaSyBFwLzcB_Ez8twvJkY2w-soS9KBIlHoaQM',
+    appId: '1:340746957889:android:204fd52f227771441282c0',
     messagingSenderId: '340746957889',
     projectId: 'lideh-wedding',
     storageBucket: 'lideh-wedding.firebasestorage.app',
   );
-
   // TODO: replace after `flutterfire configure` or manual registration.
+
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'TODO-ios-api-key',
-    appId: 'TODO-ios-app-id',
+    apiKey: 'AIzaSyClSpoz4mNrpkeTB1tFHXLT1WZSv1bal6U',
+    appId: '1:340746957889:ios:f06c78139da2c9311282c0',
     messagingSenderId: '340746957889',
     projectId: 'lideh-wedding',
     storageBucket: 'lideh-wedding.firebasestorage.app',
-    iosBundleId: 'com.example.weddingQrApp',
+    iosBundleId: 'com.ulikaye.lidehweddings',
   );
 }

@@ -1,0 +1,29 @@
+{
+  "flutter": {
+    "platforms": {
+      "android": {
+        "default": {
+          "projectId": "lideh-wedding",
+          "appId": "1:340746957889:android:204fd52f227771441282c0",
+          "fileOutput": "android/app/google-services.json"
+        }
+      },
+      "dart": {
+        "lib/firebase_options.dart": {
+          "projectId": "lideh-wedding",
+          "configurations": {
+            "android": "1:340746957889:android:204fd52f227771441282c0",
+            "ios": "1:340746957889:ios:f06c78139da2c9311282c0",
+            "web": "1:340746957889:web:0f0fff0bb60a32111282c0"
+          }
+        }
+      }
+    }
+  },
+  "firestore": {
+    "database": "(default)",
+    "location": "africa-south1",
+    "rules": "firestore.rules",
+    "indexes": "firestore.indexes.json"
+  }
+}
