@@ -6,6 +6,7 @@ import 'event_setup_screen.dart';
 import 'login_screen.dart';
 import 'records_screen.dart';
 import 'scan_screen.dart';
+import 'verify_code_screen.dart';
 
 class HomeShell extends StatefulWidget {
   const HomeShell({super.key});
@@ -17,13 +18,20 @@ class HomeShell extends StatefulWidget {
 class _HomeShellState extends State<HomeShell> {
   int _index = 1; // start on Records, like the original app after login
 
-  static const _titles = ['Event Setup', 'Add Contributor', 'Records', 'Scan / Check-in'];
+  static const _titles = [
+    'Event Setup',
+    'Add Contributor',
+    'Records',
+    'Scan / Check-in',
+    'Verify Code',
+  ];
 
   final _screens = const [
     EventSetupScreen(),
     AddContributorScreen(),
     RecordsScreen(),
     ScanScreen(),
+    VerifyCodeScreen(),
   ];
 
   void _logout() {
@@ -82,6 +90,7 @@ class _HomeShellState extends State<HomeShell> {
           NavigationDestination(icon: Icon(Icons.person_add_alt), label: 'Add'),
           NavigationDestination(icon: Icon(Icons.list_alt), label: 'Records'),
           NavigationDestination(icon: Icon(Icons.qr_code_scanner), label: 'Scan'),
+          NavigationDestination(icon: Icon(Icons.pin), label: 'Verify'),
         ],
       ),
     );

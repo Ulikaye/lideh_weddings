@@ -11,6 +11,7 @@ class Contributor {
   final String phone;
   final bool checkedIn;
   final String? checkedInTime;
+  final String? textCode;
 
   const Contributor({
     required this.id,
@@ -21,6 +22,7 @@ class Contributor {
     this.phone = '',
     this.checkedIn = false,
     this.checkedInTime,
+    this.textCode,
   });
 
   factory Contributor.fromSnapshot(DocumentSnapshot<Map<String, dynamic>> doc) {
@@ -34,6 +36,7 @@ class Contributor {
       phone: data['phone'] ?? '',
       checkedIn: data['checkedIn'] ?? false,
       checkedInTime: data['checkedInTime'],
+      textCode: data['textCode'],
     );
   }
 
@@ -45,6 +48,7 @@ class Contributor {
         'phone': phone,
         'checkedIn': checkedIn,
         'checkedInTime': checkedInTime,
+        'textCode': textCode,
       };
 
   /// Same compact pipe-delimited payload the original app encoded into its

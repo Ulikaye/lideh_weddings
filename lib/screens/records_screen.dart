@@ -137,9 +137,20 @@ class _RecordsScreenState extends State<RecordsScreen> {
                           ),
                           title: Text(c.fullName),
                           subtitle: Text('${c.id} · ${c.cardType} · ${formatMoney(c.amount)}'),
-                          trailing: IconButton(
-                            icon: const Icon(Icons.delete_outline, color: Colors.red),
-                            onPressed: () => _confirmDelete(c),
+                          trailing: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              if (c.checkedIn)
+                                IconButton(
+                                  icon: const Icon(Icons.undo, color: Colors.orange),
+                                  tooltip: 'Reset check-in',
+                                  onPressed: () => FirestoreService.instance.resetCheckIn(c.id),
+                                ),
+                              IconButton(
+                                icon: const Icon(Icons.delete_outline, color: Colors.red),
+                                onPressed: () => _confirmDelete(c),
+                              ),
+                            ],
                           ),
                           onTap: () => Navigator.of(context).push(
                             MaterialPageRoute(
